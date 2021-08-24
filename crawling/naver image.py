@@ -1,26 +1,18 @@
 from selenium import webdriver
+import time 
+ 
+keyword = input('어떤 이미지를 다운로드 받고 싶으신가요?')
+# want_num = int(input('몇 장의 이미지를 다운로드 받고 싶으신가요?'))
 
-import time
+# chrome_options = webdriver.ChromeOptions()
+# chrome_options.add_argument('--headless') # 창을 띄우지 않고 실행
+wd = webdriver.Chrome('C://Users//asus//Documents//AI-math//chromedriver.exe')   #위의 옵션을 포함하여 웹드라이브를 실행함.
+wd.get("https://search.naver.com/search.naver?where=image&sm=tab_jum&query={}".format(keyword))
+print(f'네이버 이미지 검색에서 {keyword}를 검색하였습니다.')
 
-wd = webdriver.Chrome('chromedriver.exe')
+time.sleep(3)
+image = wd.find_element_by_xpath('//*[@id="main_pack"]/section/div/div[1]/div[1]/div[6]/div/div[1]/a/img')
+url = image.get_attribute('src')
+print(url)
 
-wd.get('https://www.naver.com/')
-
-wd.get('https://search.naver.com/search.naver?where=image&sm=tab_jum&query=고양이')
-
-
-## 현재 스크롤의 위치를 확인하여 prev_height에 담습니다. 
-prev_height = wd.execute_script("return document.body.scrollHeight")
-
-# 웹페이지 맨 아래까지 무한 스크롤
-while True:
-    # 스크롤을 화면 가장 아래로 내린다
-    wd.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-    # 페이지 로딩 대기
-    time.sleep(2)
-    # 현재 문서 높이를 가져와서 저장
-    curr_height = wd.execute_script("return document.body.scrollHeight")
-    if(curr_height == prev_height):   # 스크롤을 내렸음에도 이전 높이와 동일하다면 다 내린 것이기 때문에 break.
-        break
-    else:
-        prev_height = wd.execute_script("return document.body.scrollHeight")
+### 파일 저장
